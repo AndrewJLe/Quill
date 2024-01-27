@@ -20,9 +20,9 @@ export default function RootLayout({
       <body className={cn(
         'min-h-screen font-sans antialiased grainy',
         inter.className
-        )}>
-          {children}
-        </body>
+      )}>
+        {children}
+      </body>
     </html>
   );
 }
