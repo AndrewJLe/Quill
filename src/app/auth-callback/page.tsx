@@ -1,11 +1,10 @@
 "use client"
 
-import { Loader2 } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { trpc } from "@/app/_trpc/client"
+import { useRouter, useSearchParams } from 'next/navigation'
+import { trpc } from '../_trpc/client'
+import { Loader2 } from 'lucide-react'
 
-
-function Page() {
+const Page = () => {
     const router = useRouter()
 
     const searchParams = useSearchParams()
@@ -14,25 +13,28 @@ function Page() {
     trpc.authCallback.useQuery(undefined, {
         onSuccess: ({ success }) => {
             if (success) {
-                // user is synced to database
-                router.push(origin ? `${origin}` : '/dashboard')
+                // user is synced to db
+                console.log("yes")
+                router.push(origin ? `/${origin}` : '/dashboard')
             }
         },
         onError: (err) => {
             if (err.data?.code === 'UNAUTHORIZED') {
-                // user is not authenticated, force them to sign in
                 router.push('/sign-in')
             }
         },
-
+        retry: true,
+        retryDelay: 500,
     })
 
     return (
-        <div className="w-full mt-24 flex justify-center">
-            <div className="flex flex-col items-center gap-2">
-                <Loader2 className="h-8 w-8 animate-spin text-zinc-800" />
-                <h3 className="font-semibold text-xl">Setting up your account...</h3>
-                <p className="text-sm text-zinc-500">You will be redirected soon</p>
+        <div className='w-full mt-24 flex justify-center'>
+            <div className='flex flex-col items-center gap-2'>
+                <Loader2 className='h-8 w-8 animate-spin text-zinc-800' />
+                <h3 className='font-semibold text-xl'>
+                    Setting up your account...
+                </h3>
+                <p>You will be redirected automatically.</p>
             </div>
         </div>
     )
